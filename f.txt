@@ -1,0 +1,42 @@
+import threading
+
+class FibonacciThread(threading.Thread):
+    def run(self):
+        a, b = 0, 1
+        fibonacci_numbers = []
+        while b <= 10000:
+            fibonacci_numbers.append(b)
+            a, b = b, a + b
+        print("Fibonacci series:")
+        for num in fibonacci_numbers:
+            print(num)
+
+if __name__ == "__main__":
+    fibonacci_thread = FibonacciThread()
+    fibonacci_thread.start()
+    fibonacci_thread.join()
+
+import threading
+
+class SquareThread(threading.Thread):
+    def run(self):
+        for i in range(1, 10001):
+            print(i**2)
+
+if __name__ == "__main__":
+    square_thread = SquareThread()
+    square_thread.start()
+    square_thread.join()
+
+import threading
+
+class CubeThread(threading.Thread):
+    def run(self):
+        for i in range(1, 10001):
+            print(i**3)
+
+if __name__ == "__main__":
+    cube_thread = CubeThread()
+    cube_thread.start()
+    cube_thread.join()
+

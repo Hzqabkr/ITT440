@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+#define PORT 8080
+
+int main() {
+    int client_socket;
+    struct sockaddr_in server_address;
+
+
+    if ((client_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+        perror("socket failed");
+        exit(EXIT_FAILURE);
+    }
+
+
+    server_address.sin_family = AF_INET;
+    server_address.sin_port = htons(PORT);
+
+    if (inet_pton(AF_INET, "127.0.0.1", &(server_address.sin_addr)) <= 0) {
+        perror("address conversion failed");
+        exit(EXIT_FAILURE);
+    }
+
+
+    if (connect(client_socket, (struct sockaddr *)&server_address, sizeof(server_address)) < 0) {
+        perror("connection failed");
+        exit(EXIT_FAILURE);
+    }
+
+    int received_number;
+
+ 
+    if (recv(client_socket, &received_number, sizeof(received_number), 0) == -1) {
+        perror("receive failed");
+        exit(EXIT_FAILURE);
+    }
+
+    printf("Random number received from the server: %d\n", received_number);
+
+    close(client_socket);
+
+    return 0;
+}

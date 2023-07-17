@@ -1,0 +1,24 @@
+import socket
+
+def get_number_from_user():
+    while True:
+        number = input("Enter a number: ")
+        try:
+            num = int(number)
+            break
+        except ValueError:
+            print("Invalid number. Please try again.")
+    return num
+
+def main():
+    host = "127.0.0.1"
+    port = 5000
+    client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    num = get_number_from_user()
+    data = str(num).encode()
+    client_socket.sendto(data, (host, port))
+    response = client_socket.recvfrom(1024)[0].decode()
+    print("The number is {}.".format(response))
+
+if __name__ == "__main__":
+    main()

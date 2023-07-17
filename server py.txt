@@ -1,0 +1,29 @@
+import socket
+
+def is_prime(n):
+    if n < 2:
+        return False
+    for i in range(2, int(n**0.5) + 1):
+        if n % i == 0:
+            return False
+    return True
+
+def handle_client(client_socket):
+    data = client_socket.recv(1024).decode()
+    num = int(data)
+    is_prime = is_prime(num)
+    response = "PRIME" if is_prime else "NOT PRIME"
+    client_socket.sendto(response.encode(), client_socket.getpeername())
+
+def main():
+    host = "127.0.0.1"
+    port = 5000
+    server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    server_socket.bind((host, port))
+    print("Server is listening on port {}".format(port))
+    while True:
+        client_socket, address = server_socket.recvfrom(1024)
+        handle_client(client_socket)
+
+if __name__ == "__main__":
+    main()
